@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace UdpServerDemo
-{
+namespace UdpServerDemo {
     class Program
     {
+        private static string CLIENT_IP = string.Empty;
         static UdpClient udpServer;
         static void Main(string[] args)
         {
+            CLIENT_IP = "192.168.13.141";
             udpServer = new UdpClient(61000);       // 当前服务器使用的端口
-            udpServer.Connect("127.0.0.1", 50000); // 与客户端建立连接
+            udpServer.Connect(CLIENT_IP, 50000); // 与客户端建立连接
             Console.WriteLine("服务端已经开启......");
 
             #region 开启线程保持通讯
@@ -34,7 +32,7 @@ namespace UdpServerDemo
         static void ReciveMsg()
         {
 
-            var remoteIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50000); // 远程端点，即发送消息方的端点
+            var remoteIpEndPoint = new IPEndPoint(IPAddress.Parse(CLIENT_IP), 50000); // 远程端点，即发送消息方的端点
             while (true)
             {
                 byte[] receiveBytes = udpServer.Receive(ref remoteIpEndPoint); // 接收消息，得到数据报
